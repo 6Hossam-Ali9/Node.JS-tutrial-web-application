@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const Blog = require('./models/blogs.js');
+const blogRoutes = require('./routes/blogroutes.js');
+
 //express app
 const app = express();
 
@@ -56,39 +57,7 @@ app.get('/about', (req, res) => {
     res.render('about', { title: 'About' });
 });
     
-
-app.get('/blogs', (req, res) => {
-    Blog.find().sort({ createdAt: -1 }).then(result => {
-        res.render('index', { title: 'Home' , blogs: result }); 
-        //We don't need to provide the place as ejs automatically use name folder views as the main folder
-    }).catch(err => console.log(err));
-});
-
-
-app.post('/blogs', (req, res) => {
-    const blog = new Blog(req.body);
-
-    blog.save().then(() => res.redirect('/blogs')).catch(err => console.log(err));
-});
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title: 'Create new blog' });
-});
-
-app.get('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findById(id).then(result => {
-        res.render('blog', { title: 'Blog', blog: result })
-    }).catch(err => console.log(err));
-});
-
-app.delete('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-
-    Blog.findByIdAndDelete(id).then(() => {
-        res.json({redirect: '/blogs'})
-    }).catch(err => console.log(err));
-});
+app.use('/blogs', blogRoutes);
 
 //to handle 404 we can use (use method) as express works up to bottom when it reach use the 404 page is excuted
 app.use((req, res) => {
