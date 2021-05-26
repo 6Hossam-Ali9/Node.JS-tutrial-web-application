@@ -1,0 +1,18 @@
+<footer>
+    Copyright &copy; Blog Batman 2021
+</footer>
+<script>
+    let body = document.querySelector('body');
+    let mode = document.querySelector('button.switch_mode');
+    mode.addEventListener('click', () => {
+        body.classList.toggle('dark_mode');
+        mode.classList.toggle('light');
+        mode.classList.toggle('dark');
+        if(mode.classList.contains('light')){
+            mode.innerText = 'Dark';
+        }else{
+            mode.innerText = 'Light';
+        }
+    });
+    
+</script>
